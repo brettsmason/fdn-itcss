@@ -86,53 +86,34 @@ $button-transition: background-color 0.25s ease-out, color 0.25s ease-out !defau
   $font-family: $button-font-family,
   $padding: $button-padding,
   $border-radius: $button-radius,
-  $font-size: map-get($button-sizes, default)
 ) {
   @include disable-mouse-outline;
+
   display: inline-block;
   vertical-align: middle;
-  margin: $margin;
-  font-family: $font-family;
-
-  @if (type-of($padding) == 'map') {
-    @each $size, $padding in $padding {
-      @include breakpoint($size) {
-        padding: $padding;
-      }
-    }
-  }
-  @else {
-    padding: $padding;
-  }
-
-  -webkit-appearance: none;
-  border: 1px solid transparent;
-  border-radius: $button-radius;
-  transition: $button-transition;
-
-  font-size: $font-size;
-  line-height: 1;
+  font: inherit;
   text-align: center;
+  margin: $margin;
   cursor: pointer;
+  padding: $padding;
+  transition: $transition;
+  border-radius: $border-radius;
 }
 
 /// Sets the visual style of a button.
 /// @param {Color} $background [$button-background] - Background color of the button.
 /// @param {Color} $background-hover [$button-background-hover] - Background color of the button on hover. Set to `auto` to have the mixin automatically generate a hover color.
 /// @param {Color} $color [$button-color] - Text color of the button. Set to `auto` to automatically generate a color based on the background color.
+/// @param {Color} $color-hover [$button-color-hover] - Text color of the button on hover. Set to `auto` to automatically generate a color based on the background hover color.
 @mixin button-style(
   $background: $button-background,
   $background-hover: $button-background-hover,
   $color: $button-color,
-  $background-hover-lightness: $button-background-hover-lightness
+  $color-hover: $button-color-hover
 ) {
-  @if $color == auto {
-    $color: color-pick-contrast($background, ($button-color, $button-color-alt));
-  }
-
-  @if $background-hover == auto {
-    $background-hover: scale-color($background, $lightness: $background-hover-lightness);
-  }
+  $color: if($color == auto, color-pick-contrast($background, ($button-color, $button-color-alt)), $color);
+  $background-hover: if($background-hover == auto, scale-color($background, $lightness: $global-scale-color), $background-hover);
+  $color-hover: if($color-hover == auto, color-pick-contrast($background-hover, ($button-background, $button-color-alt)), $color-hover);
 
   background-color: $background;
   color: $color;
@@ -140,6 +121,6 @@ $button-transition: background-color 0.25s ease-out, color 0.25s ease-out !defau
   &:hover,
   &:focus {
     background-color: $background-hover;
-    color: $color;
+    color: $color-hover;
   }
 }
