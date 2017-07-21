@@ -81,7 +81,7 @@ $button-hollow-hover-lightness: -50% !default;
 $button-transition: background-color 0.25s ease-out, color 0.25s ease-out !default;
 
 /// Sets the base styles of a button.
-@mixin button-base(
+@mixin zf-button-base(
   $margin: $button-margin,
   $font-family: $button-font-family,
   $padding: $button-padding,
@@ -105,7 +105,7 @@ $button-transition: background-color 0.25s ease-out, color 0.25s ease-out !defau
 /// @param {Color} $background-hover [$button-background-hover] - Background color of the button on hover. Set to `auto` to have the mixin automatically generate a hover color.
 /// @param {Color} $color [$button-color] - Text color of the button. Set to `auto` to automatically generate a color based on the background color.
 /// @param {Color} $color-hover [$button-color-hover] - Text color of the button on hover. Set to `auto` to automatically generate a color based on the background hover color.
-@mixin button-style(
+@mixin zf-button-style(
   $background: $button-background,
   $background-hover: $button-background-hover,
   $color: $button-color,
@@ -122,5 +122,19 @@ $button-transition: background-color 0.25s ease-out, color 0.25s ease-out !defau
   &:focus {
     background-color: $background-hover;
     color: $color-hover;
+  }
+}
+
+@mixin zf-buttons {
+  // Base button
+  .c-button {
+    @include button-base;
+
+    // Generate each of our button modifier classes
+    @each $name, $color in $button-palette {
+      &.--#{$name} {
+        @include zf-button-style($color);
+      }
+    }
   }
 }
