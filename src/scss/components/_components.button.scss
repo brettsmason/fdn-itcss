@@ -1,0 +1,145 @@
+// Foundation for Sites by ZURB
+// foundation.zurb.com
+// Licensed under MIT Open Source
+
+////
+/// @group button
+////
+
+/// Font family for button elements.
+/// @type Font
+$button-font-family: inherit !default;
+
+/// Padding inside buttons.
+/// @type List
+$button-padding: 0.85em 1em !default;
+
+/// Margin around buttons.
+/// @type List
+$button-margin: 0 0 $global-margin 0 !default;
+
+/// Default fill for buttons. Can either be `solid` or `hollow`.
+/// @type Keyword
+$button-fill: solid !default;
+
+/// Default background color for buttons.
+/// @type Color
+$button-background: $primary-color !default;
+
+/// Background color on hover for buttons.
+/// @type Color
+$button-background-hover: scale-color($button-background, $lightness: -15%) !default;
+
+/// Font color for buttons.
+/// @type List
+$button-color: $white !default;
+
+/// Alternative font color for buttons.
+/// @type List
+$button-color-alt: $black !default;
+
+/// Border radius for buttons, defaulted to global-radius.
+/// @type Number
+$button-radius: $global-radius !default;
+
+/// Border width for hollow outline buttons
+/// @type Number
+$button-hollow-border-width: 1px !default;
+
+/// Sizes for buttons.
+/// @type Map
+$button-sizes: (
+  tiny: 0.6rem,
+  small: 0.75rem,
+  default: 0.9rem,
+  large: 1.25rem,
+) !default;
+
+/// Coloring classes. A map of classes to output in your CSS, like `.secondary`, `.success`, and so on.
+/// @type Map
+$button-palette: $foundation-palette !default;
+
+/// opacity for a disabled button.
+/// @type List
+$button-opacity-disabled: 0.25 !default;
+
+/// Background color lightness on hover for buttons.
+/// @type Number
+$button-background-hover-lightness: -20% !default;
+
+/// Color lightness on hover for hollow buttons.
+/// @type Number
+$button-hollow-hover-lightness: -50% !default;
+
+// Internal: flip from margin-right to margin-left for defaults
+@if $global-text-direction == 'rtl' {
+  $button-margin: 0 0 $global-margin $global-margin !default;
+}
+
+/// transitions for buttons.
+/// @type List
+$button-transition: background-color 0.25s ease-out, color 0.25s ease-out !default;
+
+/// Sets the base styles of a button.
+@mixin button-base(
+  $margin: $button-margin,
+  $font-family: $button-font-family,
+  $padding: $button-padding,
+  $border-radius: $button-radius,
+  $font-size: map-get($button-sizes, default)
+) {
+  @include disable-mouse-outline;
+  display: inline-block;
+  vertical-align: middle;
+  margin: $margin;
+  font-family: $font-family;
+
+  @if (type-of($padding) == 'map') {
+    @each $size, $padding in $padding {
+      @include breakpoint($size) {
+        padding: $padding;
+      }
+    }
+  }
+  @else {
+    padding: $padding;
+  }
+
+  -webkit-appearance: none;
+  border: 1px solid transparent;
+  border-radius: $button-radius;
+  transition: $button-transition;
+
+  font-size: $font-size;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+}
+
+/// Sets the visual style of a button.
+/// @param {Color} $background [$button-background] - Background color of the button.
+/// @param {Color} $background-hover [$button-background-hover] - Background color of the button on hover. Set to `auto` to have the mixin automatically generate a hover color.
+/// @param {Color} $color [$button-color] - Text color of the button. Set to `auto` to automatically generate a color based on the background color.
+@mixin button-style(
+  $background: $button-background,
+  $background-hover: $button-background-hover,
+  $color: $button-color,
+  $background-hover-lightness: $button-background-hover-lightness
+) {
+  @if $color == auto {
+    $color: color-pick-contrast($background, ($button-color, $button-color-alt));
+  }
+
+  @if $background-hover == auto {
+    $background-hover: scale-color($background, $lightness: $background-hover-lightness);
+  }
+
+  background-color: $background;
+  color: $color;
+
+  &:hover,
+  &:focus {
+    background-color: $background-hover;
+    color: $color;
+  }
+}
